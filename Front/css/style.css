@@ -1,0 +1,42 @@
+.imgTaille{
+    width: 50%;
+}
+.nav{
+    width: 45%;
+}
+.img{
+    width: 30%;
+}
+.bloc-nav{
+    display: flex;
+    justify-content: center;
+}
+.listeArticle{
+    display: contents;
+    flex-direction: column;
+}
+
+.backLogo{
+    background-color: #f3e9f1;
+}
+.background{
+    background: transparent;
+    border: 0;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color:  #f3e9f1;
+    padding-top: 30px;
+}
+.buttonValide{
+    justify-content: center;
+    display: flex;
+    width: 143%;
+}
+.butonLentilles{
+    width: 20% !important;
+    
+}
