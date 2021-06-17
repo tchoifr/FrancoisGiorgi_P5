@@ -194,7 +194,7 @@ this.tableauId = []
     <img class="card-img-top" src=${this.panier[i].imageUrl} alt="Card image cap">
     <div class="card-body">
     <h5 class="card-title">${this.panier[i].name}</h5>
-    <p class="card-text">${this.panier[i].price}€</p>
+    <p class="card-text">${this.panier[i].price / 100}€</p>
     <p id="quantitesTableau${i}" class="w-10"> ${this.panier[i].quantités}Qts </p>
     <a href='produit.html?id=${this.panier[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a>
     <button  class="background" onclick="ajouterPanier(${i},'${this.panier[i]._id}')"><i class="fas fa-plus"></i></button>
@@ -306,6 +306,7 @@ let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, for
       })
      
     }
+
 
   
 
