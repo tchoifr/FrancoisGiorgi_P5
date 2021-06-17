@@ -1,46 +1,55 @@
+// recherche dans url           
 const queryString = window.location.search;
-console.log()
 const urlParams = new URLSearchParams(queryString);
+//prendre la variable dans url de ID
 let idArticle = urlParams.get('id');
+
+//prendre la variable dans url de page
 let page = urlParams.get('page')
+
+//variable produit
 let product = [];
+
+//varible panier
 const panier = [];
 
-// appel Url
+let tableauId = [];
 
+
+// appel API (promesse)
 fetch('http://localhost:3000/api/cameras')
+
+// pour activer la promesse utilisez (then)
   .then(function(res) {   
     if (res.ok) {
+
+      // mettre les element de api en .json  Fin de fonction 
       return res.json();
     }
   })
   //document dans Url
   .then(function(value) { 
-    console.log('tableau product :', value);
-   /* if(page){
-      afficherDescription(value);
-    }
-    else{
-      afficherArticle(value);
-      product = value
-      
-    }   */
-   //recuperation de L'API
-product=value
- //voir les pages
+    product=value;
+
+ //voir les pages Url de la page
     switch (page) {
 
+//affichage description
       case 'description':
        afficherDescription(value);
         break;
+
+        //affichage panier
       case 'panier':
         afficherPanier()
         break;
+
+        //affichage afficherArticle par default
       default:
        afficherArticle(value);
        
     }
-    
+    // fin de fonction
     return value
   
   })
@@ -51,18 +60,21 @@ product=value
   });
 
 //affiche les article envoyer par l'API
-
   function afficherArticle(article){
     let contenueHtml= '';
     for(let i=0;i<article.length; i++){
       contenueHtml += `
-      <tr id="tableauArticle">
-          <td><img src=${article[i].imageUrl} class ="img-fluid imgTaille img-responsive img-thumbnail w-50"></td>
-          <td class="w-25">${article[i].name}</td>
-          <td class="w-25">${article[i].price}€</td>
-          <td class="w-20"> <a href='produit.html?id=${article[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a></td>
-          <td class="w-25 text-center"> <button  class="background" onclick="ajouterPanier(${i},'${article[i]._id}')"><i class="fas fa-cart-arrow-down"></i></button> </td>
-         </tr>`
+    
+    <div class="card">
+    <img class="card-img-top img-marge" src=${article[i].imageUrl} alt="Card image cap">
+    <div class="card-body card-alignement">
+    <h5 class="card-title">${article[i].name}</h5>
+    <p class="card-text">${article[i].price}€</p>
+    <a href='produit.html?id=${article[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a>
+    <button  class="background" onclick="ajouterPanier(${i},'${article[i]._id}')"><i class="fas fa-cart-arrow-down"></i></button>
+  </div>
+</div>
+         `
     }
  
 document.getElementById('productList').innerHTML = contenueHtml
@@ -71,141 +83,150 @@ document.getElementById('productList').innerHTML = contenueHtml
 
 
 
-  //local storage panier en cash
+  //local storage panier
 function ajouterPanier(position,id){
 // je verifie que le localStorage existe
 if (JSON.parse (localStorage.getItem("panierLocalStorage"))){
+  //variable panier
   this.panier = JSON.parse (localStorage.getItem("panierLocalStorage"));
 }
-// sinon j'initialise
+// sinon j'initialise la varible 
 else {
   this.panier = []
 }
-
-
-
 
 for(let i=0;i<this.panier.length; i++){
   // si ya deja un article avec le meme ID alor quantité + 1
     if(id===this.panier[i]._id){
       console.log('tableau panier IF: ', this.panier[i])
       this.panier[i]['quantités']+=1;
-      localStorage.setItem("panierLocalStorage",JSON.stringify(this.panier));
-      alert('Article ajouter au panier');
-      //selection element dont l'ID et (quantitesTableau)
-      document.getElementById('quantitesTableau').innerHTML= this.panier[position]['quantités']
 
+      //cree panier localStarage
+      localStorage.setItem("panierLocalStorage",JSON.stringify(this.panier));
+     // alert('Article ajouter au panier');
+      //selection element dont l'ID et (quantitesTableau)
+      if(page==='panier'){
+        let prixTotal=Number(document.getElementById('validePanier').textContent) ;
+        prixTotal += this.panier[position].price 
+         //selection element dont l'ID et (validePanier)
+         console.log(this.panier[position].price)
+         console.log(this.panier[position]['quantités'])
+        document.getElementById('validePanier').innerHTML = prixTotal;
+     
+      document.getElementById('quantitesTableau'+ position).innerHTML= this.panier[position]['quantités'] + 'Qts'
+      }
       return;
     }
 
 }
+
 // si il y a pas d'article avec le meme Id alor cree la ligne article
 let positionPush = this.panier.push (product[position]);
+
 this.panier[positionPush-1]['quantités']=1;
   localStorage.setItem("panierLocalStorage",JSON.stringify(this.panier));
-  alert('Article ajouter au panier');
+  //alert('Article ajouter au panier');
  
  //prix total
  if (page === 'panier'){
  let prixTotal=Number(document.getElementById('validePanier').textContent) ;
- prixTotal += this.panier[position].price
+ prixTotal += this.panier[position].price*this.panier[position]['quantités']
+
   //selection element dont l'ID et (validePanier)
-  
-  
  document.getElementById('validePanier').innerHTML = prixTotal;
- console.log(document.getElementById('validePanier').textContent);
-
+//alert('je suis la');
 }
-
 }
 
 
  //Supprimer panier
 function supprimerPanier(position){
  
+  let prixTotal=Number(document.getElementById('validePanier').textContent) ;
+prixTotal -= this.panier[position].price
 
 //si la quantités et = a 1 alors suprime la ligne
 if(this.panier[position]['quantités']===1){
   this.panier.splice(position,1)
   document.getElementById('tableauArticle'+ position).remove()
+  localStorage.setItem("panierLocalStorage",JSON.stringify(this.panier))
+  afficherPanier();
 }
-// reduction de la quantité de 1 a chaque click
 
+else{
+// reduction de la quantité de 1 a chaque click
 this.panier[position]['quantités']-=1;
   console.log(this.panier)
   localStorage.setItem("panierLocalStorage",JSON.stringify(this.panier))
-  document.getElementById('quantitesTableau').innerHTML= this.panier[position]['quantités']
+  document.getElementById('quantitesTableau'+ position).innerHTML= this.panier[position]['quantités'] + 'Qts'
 
-alert('Article supprimer');
+//alert('Article supprimer');
 //supprimer affichage de mon tableauArticle avec la position
+}
+
+ //selection element dont l'ID et (validePanier)
+document.getElementById('validePanier').innerHTML = prixTotal;
 }
 
 
 //afficher panier
 function afficherPanier(){ 
-this.panier=JSON.parse (localStorage.getItem("panierLocalStorage"))
+  if (JSON.parse (localStorage.getItem("panierLocalStorage"))){
+    //variable panier
+    this.panier = JSON.parse (localStorage.getItem("panierLocalStorage"));
+  }
+  // sinon j'initialise la varible 
+  else {
+    this.panier = []
+  }
 console.log('tableurpanier :',this.panier)
 let listOfProducts = '';
 let prixTotalPanier = 0;
+
+this.tableauId = []
   for(let i=0;i<this.panier.length; i++){//parcour du tableau panier
+
     // ajout des prix
-  prixTotalPanier += this.panier[i].price ;
-    
-   
+  prixTotalPanier += this.panier[i].price*this.panier[i]['quantités'] ;
+    this.tableauId.push(this.panier[i]._id);
     listOfProducts += `
-      <tr id="tableauArticle${i}">
-          <td><img src=${this.panier[i].imageUrl} class ="img-fluid imgTaille img-responsive img-thumbnail w-25"></td>
-          <td id="quantitesTableau" class="w-10"> ${this.panier[i].quantités}Qts</td>
-          <td class="w-15">${this.panier[i].name}</td>
-          <td class="w-15">${this.panier[i].price}€</td>
-          <td class="w-15"> <a href='produit.html?id=${this.panier[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a></td>
-          <td class="w-15 text-center"> <button  class="background" onclick="ajouterPanier(${i},'${this.panier[i]._id}')"><i class="fas fa-plus"></i></button> </td>
-          <td class="w-15 text-center"> <button  class="background" onclick="supprimerPanier(${i})"><i class="fas fa-minus"></i></button> </td>       
-         </tr>   
-         `  
-      
+    <div id="tableauArticle${i}" class="card card-panier">
+    <img class="card-img-top" src=${this.panier[i].imageUrl} alt="Card image cap">
+    <div class="card-body">
+    <h5 class="card-title">${this.panier[i].name}</h5>
+    <p class="card-text">${this.panier[i].price}€</p>
+    <p id="quantitesTableau${i}" class="w-10"> ${this.panier[i].quantités}Qts </p>
+    <a href='produit.html?id=${this.panier[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a>
+    <button  class="background" onclick="ajouterPanier(${i},'${this.panier[i]._id}')"><i class="fas fa-plus"></i></button>
+    <button  class="background" onclick="supprimerPanier(${i})"><i class="fas fa-minus"></i></button>
+  </div>
+</div>
+
+
+`  
+
   } 
-   listOfProducts+=`
-        <div id="butonValiderCommande" class="row">
-        <button  class="btn btn-outline-primary col-md-4">Validé Commande</button>
-        <div id="validePanier" class="col-6">
- ${prixTotalPanier}
+  console.log(this.tableauId)
+  listOfProducts += `
+<div class="card card-panier">
+        <div class="d-inline-flex justify-content-center prixTotal"><p>Prix Total</p>
         </div>
-        </div>
-        `
-  //cree un element
+        <div id="validePanier" class="d-inline-flex justify-content-center prixTotal">${prixTotalPanier} 
+        
+        </div>€
+       
 
+</div>
 
- 
-
+     
+         `   
+        
  //affiche productlist Html
   document.getElementById('productListPanier').innerHTML = listOfProducts
 }
-  //Declaration de la variable pour pouvoir y mettre les prix qui sont dans le panier
- /* let prixTotalPanier = [];
+ 
 
-  //allez chercher les prix dans le panier
-  for (let i = 0; i <prixTotalPanier.length; i++) {
-     prixTotalPanier = panierLocalStorage[i].price
-
-    //mettre les prix du panier dans la variable 
-    panierLocalStorage.push(prixProduitsDansLePanier)
-
-    console.log(prixTotalPanier)
-  }
-//additionner les prix de la variable prixTotalPanier
-const reducer = (accumulator , currentValue) => accumulator + currentValue
-const prixTotal = prixTotalPanier.reduce(reducer,0);
-
-
-
-`
-
-//injection html dans la page panier
-prixProduitsDansLePanier.innerHTML("beforeend",affichePrixHtml)
-*/
-
-//fonction afficherDescription 
+//fonction afficherDescription dans la page produit.html 
   function afficherDescription(article){
      let listOfProducts = '';
     for(let i=0; i<article.length; i++){
@@ -215,14 +236,16 @@ prixProduitsDansLePanier.innerHTML("beforeend",affichePrixHtml)
       if(article[i]._id===idArticle){
         //html description
         listOfProducts += `
-        
-      <div id="tableauArticle${i}" class="row">
-        <div class="col-6 "><img src=${article[i].imageUrl} class ="img-fluid imgTaille img-responsive img-thumbnail "></div>
-       <div class="col-6">
-        <div class="row">${article[i].name}</div>
-        <div class="row">${article[i].price}€</div>
-        <div class="row">${article[i].description}</div>
-        <div class="row"><button  class="background" onclick="ajouterPanier(${i},'${article[i]._id}')"><i class="fas fa-cart-arrow-down"></i></button> </div>
+        <div id="tableauArticle${i}" class="card card-description">
+        <img class="card-img-top" src=${article[i].imageUrl} alt="Card image cap">
+        <div class="card-body card-alignement">
+        <h5 class="card-title">${article[i].name}</h5>
+        <p class="card-text">${article[i].price}€</p>
+        <p class="card-text">${article[i].description}</p>
+        <button  class="background" onclick="ajouterPanier(${i},'${article[i]._id}')"><i class="fas fa-cart-arrow-down"></i></button>
+      </div>
+    </div>
+
        <div class="form-floating ">
         <select class="butonLentilles form-select  " id="floatingSelect" aria-label="Floating label select example">`;
 
@@ -244,25 +267,45 @@ prixProduitsDansLePanier.innerHTML("beforeend",affichePrixHtml)
         }
       }
     }
-   
+    function Contact(firstName,lastName,address,city,email) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.address = address;
+      this.city = city;
+      this.email = email;
 
-
-    
+    }
+function envoieApi(){
+  let products = this.tableauId;
+let form = document.forms['formulaireApi']
+let formulaireNom = form.elements['nom'].value ;
+let formulairePrenom = form.elements['prenom'].value ;
+let formulaireAdress = form.elements['adress'].value ;
+let formulaireVille = form.elements['ville'].value ;
+let formulaireEmail = form.elements['email'].value ;
+let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, formulaireVille, formulaireEmail );
+ console.log(products);
+ console.log(contact);
+    fetch('http://localhost:3000/api/cameras/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ contact, products })
+    })
+      .then(response => 
+        response.json()
+      )
+      .then((data) => {
+        console.log(data.orderId)
+        localStorage.setItem("order", JSON.stringify(data.orderId));
+        document.location.href = "confirmationDeCommande.html";
+      })
+      .catch(err => {
+        console.log(err)
+      })
+     
+    }
 
   
 
-/* 
-function Products (pic,name,price){
-    this.pic = pic,
-    this.name = name,
-    this.price = price
-  }
-
-const product1 = new Products('back-end/images/vcam_1.jpg', 'appareilPhoto',500 )
-const product2 = new Products('back-end/images/vcam_2.jpg','appareilPhoto',600 )
-const product3 = new Products('back-end/images/vcam_3.jpg','appareilPhoto',700 )
-const product4 = new Products('back-end/images/vcam_4.jpg','appareilPhoto',800 )
-const product5 = new Products('back-end/images/vcam_5.jpg','appareilPhoto',900 )
-
-product.push(product1,product2,product3,product4,product5)
-*/

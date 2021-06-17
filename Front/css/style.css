@@ -37,6 +37,40 @@
     width: 143%;
 }
 .butonLentilles{
-    width: 20% !important;
+    width: 11em!important;
     
+}
+.prixTotal{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: x-large;
+}
+.card{
+    width: 25rem;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 1px;
+}
+
+.img-marge{
+    margin-top: 10px;
+}
+.card-panier{
+width: 13rem !important;
+display: flex;
+align-items: center;
+
+}
+#productListPanier{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.card-description{
+    width: 35rem !important;
+}
+.card-alignement{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }

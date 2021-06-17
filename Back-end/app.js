@@ -4,6 +4,7 @@ const path = require('path');
 const cameraRoutes = require('./routes/camera');
 const teddyRoutes = require('./routes/teddy');
 const furnitureRoutes = require('./routes/furniture');
+const sauceRoutes = require('./routes/sauce');
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use(express.json());
 app.use('/api/cameras', cameraRoutes);
 app.use('/api/teddies', teddyRoutes);
 app.use('/api/furniture', furnitureRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 module.exports = app;

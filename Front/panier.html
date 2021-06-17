@@ -11,6 +11,7 @@
    
     <title> Orinoco</title>
 </head>
+
 <body class="container">
   <nav class="navbar navbar-expand-lg navbar-light backLogo">
     <div class="container-fluid">
@@ -31,20 +32,39 @@
     </div>
   </nav>
  
-<!--table-->
-<table class="table table-striped">
-    <thead>
-    
-    </thead>
-    <tbody id="productListPanier" >
+<div id="productListPanier">
 
-    </tbody>
-  </table>
+</div>
   
   <div id="Commande">
 
   </div>
   
+  <form  id="formulaireApi">
+    <div class="mb-3">
+      <label for="InputNom" class="form-label">Nom</label>
+      <input type="text" class="form-control" id="InputNom" name="nom">
+    </div>
+    <div class="mb-3">
+      <label for="InputPrenom" class="form-label">Prénom</label>
+      <input type="text" class="form-control" id="InputPrenom" name="prenom">
+    </div>
+    <div class="mb-3">
+      <label for="InputAdresse" class="form-label">Adresse</label>
+      <input type="text" class="form-control" id="InputAdresse" name="adress">
+    </div>
+    <div class="mb-3">
+      <label for="InputVille" class="form-label">Ville</label>
+      <input type="text" class="form-control" id="InputVille" name="ville">
+    </div>
+    <div class="mb-3">
+      <label for="InputEmail1" class="form-label">Email</label>
+      <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" name="email">
+    </div>
+    
+    <button type="button" onclick="envoieApi()" class="btn btn-primary">Valider</button>
+    
+  </form>
 
 
  <footer>
