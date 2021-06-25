@@ -44,11 +44,18 @@ fetch('http://localhost:3000/api/cameras')
         afficherPanier()
         break;
 
+      case 'confirmation':
+        receptionConfirmationDeCommande()
+        break;
+
+
         //affichage afficherArticle par default
       default:
        afficherArticle(value);
+
        
     }
+    
     // fin de fonction
     return value
   
@@ -69,7 +76,7 @@ fetch('http://localhost:3000/api/cameras')
     <img class="card-img-top img-marge" src=${article[i].imageUrl} alt="Card image cap">
     <div class="card-body card-alignement">
     <h5 class="card-title">${article[i].name}</h5>
-    <p class="card-text">${article[i].price}€</p>
+    <p class="card-text">${article[i].price /100}€</p>
     <a href='produit.html?id=${article[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a>
     <button  class="background" onclick="ajouterPanier(${i},'${article[i]._id}')"><i class="fas fa-cart-arrow-down"></i></button>
   </div>
@@ -107,7 +114,7 @@ for(let i=0;i<this.panier.length; i++){
       //selection element dont l'ID et (quantitesTableau)
       if(page==='panier'){
         let prixTotal=Number(document.getElementById('validePanier').textContent) ;
-        prixTotal += this.panier[position].price 
+        prixTotal += this.panier[position].price /100
          //selection element dont l'ID et (validePanier)
          console.log(this.panier[position].price)
          console.log(this.panier[position]['quantités'])
@@ -129,7 +136,7 @@ this.panier[positionPush-1]['quantités']=1;
  
  //prix total
  if (page === 'panier'){
- let prixTotal=Number(document.getElementById('validePanier').textContent) ;
+ let prixTotal=Number(document.getElementById('validePanier').textContent);
  prixTotal += this.panier[position].price*this.panier[position]['quantités']
 
   //selection element dont l'ID et (validePanier)
@@ -143,7 +150,7 @@ this.panier[positionPush-1]['quantités']=1;
 function supprimerPanier(position){
  
   let prixTotal=Number(document.getElementById('validePanier').textContent) ;
-prixTotal -= this.panier[position].price
+prixTotal -= this.panier[position].price /100
 
 //si la quantités et = a 1 alors suprime la ligne
 if(this.panier[position]['quantités']===1){
@@ -191,14 +198,16 @@ this.tableauId = []
     this.tableauId.push(this.panier[i]._id);
     listOfProducts += `
     <div id="tableauArticle${i}" class="card card-panier">
-    <img class="card-img-top" src=${this.panier[i].imageUrl} alt="Card image cap">
+    <img class="card-img-top img-taille-panier" src=${this.panier[i].imageUrl} alt="Card image cap ">
     <div class="card-body">
     <h5 class="card-title">${this.panier[i].name}</h5>
     <p class="card-text">${this.panier[i].price / 100}€</p>
-    <p id="quantitesTableau${i}" class="w-10"> ${this.panier[i].quantités}Qts </p>
-    <a href='produit.html?id=${this.panier[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a>
     <button  class="background" onclick="ajouterPanier(${i},'${this.panier[i]._id}')"><i class="fas fa-plus"></i></button>
+    <span id="quantitesTableau${i}"> ${this.panier[i].quantités}Qts </span>
     <button  class="background" onclick="supprimerPanier(${i})"><i class="fas fa-minus"></i></button>
+    <a href='produit.html?id=${this.panier[i]._id}&page=description'> <button class="btn btn-outline-primary">Details</button></a>
+    
+   
   </div>
 </div>
 
@@ -211,9 +220,13 @@ this.tableauId = []
 <div class="card card-panier">
         <div class="d-inline-flex justify-content-center prixTotal"><p>Prix Total</p>
         </div>
-        <div id="validePanier" class="d-inline-flex justify-content-center prixTotal">${prixTotalPanier} 
-        
+        <div >Livraison Gratuit
+        </div>
+        <div>
+        <div id="validePanier" class="d-inline-flex justify-content-center prixTotal">${prixTotalPanier / 100} 
         </div>€
+        </div>
+
        
 
 </div>
@@ -240,7 +253,7 @@ this.tableauId = []
         <img class="card-img-top" src=${article[i].imageUrl} alt="Card image cap">
         <div class="card-body card-alignement">
         <h5 class="card-title">${article[i].name}</h5>
-        <p class="card-text">${article[i].price}€</p>
+        <p class="card-text">${article[i].price /100}€</p>
         <p class="card-text">${article[i].description}</p>
         <button  class="background" onclick="ajouterPanier(${i},'${article[i]._id}')"><i class="fas fa-cart-arrow-down"></i></button>
       </div>
@@ -299,14 +312,41 @@ let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, for
       .then((data) => {
         console.log(data.orderId)
         localStorage.setItem("order", JSON.stringify(data.orderId));
-        document.location.href = "confirmationDeCommande.html";
+        document.location.href = "confirmationDeCommande.html?page=confirmation";
       })
       .catch(err => {
         console.log(err)
       })
+    
+  
+   
+
+    }
+    function receptionConfirmationDeCommande(){
+      this.panier= JSON.parse (localStorage.getItem('panierLocalStorage'));
+      let prixTotalPanier = 0
+     for (let i = 0; i<this.panier.length ; i++ )
+     {
+      prixTotalPanier += this.panier[i].price*this.panier[i]['quantités'] ;
+    
+     }
      
+    let order = JSON.parse (localStorage.getItem("order"))
+      listOfProducts=`
+      <div class='messageFinal' >${order}
+      </div>
+      <div class='' >${prixTotalPanier/100}€
+      </div>
+      
+      
+
+      
+      `
+      document.getElementById('confirmationDeCommande').innerHTML = listOfProducts;
+
     }
 
+  
 
   
 
