@@ -289,16 +289,39 @@ this.tableauId = []
 
     }
 function envoieApi(){
-  let products = this.tableauId;
+let products = this.tableauId;
 let form = document.forms['formulaireApi']
 let formulaireNom = form.elements['nom'].value ;
 let formulairePrenom = form.elements['prenom'].value ;
 let formulaireAdress = form.elements['adress'].value ;
 let formulaireVille = form.elements['ville'].value ;
 let formulaireEmail = form.elements['email'].value ;
+let erreurChamps = false
 let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, formulaireVille, formulaireEmail );
  console.log(products);
  console.log(contact);
+ 
+ if(formulaireNom === ""){
+  erreurChamps = true
+  document.getElementById('messageErreurNom').innerHTML = `<i class="fas fa-exclamation-triangle"></i> Remplir Nom `
+}
+ if(formulairePrenom === ""){
+   erreurChamps = true
+   document.getElementById('messageErreurPrenom').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Remplir Prénom'
+ }
+ if(formulaireAdress === ""){
+   erreurChamps = true
+   document.getElementById('messageErreurAdresse').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Remplir Adresse'
+  }
+ if(formulaireVille ===""){
+   erreurChamps = true
+   document.getElementById('messageErreurVille').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Remplir Ville'
+  }
+ if(formulaireEmail===""){
+   erreurChamps = true
+   document.getElementById('messageErreurEmail').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Remplir Email'
+ }
+ if(erreurChamps ===false){
     fetch('http://localhost:3000/api/cameras/order', {
       method: 'POST',
       headers: {
@@ -322,6 +345,9 @@ let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, for
    
 
     }
+  }
+
+
     function receptionConfirmationDeCommande(){
       this.panier= JSON.parse (localStorage.getItem('panierLocalStorage'));
       let prixTotalPanier = 0
@@ -333,7 +359,8 @@ let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, for
      
     let order = JSON.parse (localStorage.getItem("order"))
       listOfProducts=`
-      <div class='messageFinal' >${order}
+      <div>
+      <div class='' >${order}
       </div>
       <div class='' >${prixTotalPanier/100}€
       </div>

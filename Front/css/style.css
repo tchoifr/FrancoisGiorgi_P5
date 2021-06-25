@@ -80,4 +80,9 @@ align-items: center;
 }
 .formulairePlacement{
     display: flex;
+
+}
+.erreurFormulaire{
+    
+    color: red;
 }

@@ -44,22 +44,27 @@
     <div class="mb-3">
       <label for="InputNom" class="form-label">Nom</label>
       <input type="text" class="form-control" id="InputNom" name="nom">
+      <div id="messageErreurNom" class="erreurFormulaire"></div>
     </div>
     <div class="mb-3">
       <label for="InputPrenom" class="form-label">Prénom</label>
       <input type="text" class="form-control" id="InputPrenom" name="prenom">
+      <div id="messageErreurPrenom" class="erreurFormulaire"></div>
     </div>
     <div class="mb-3">
       <label for="InputAdresse" class="form-label">Adresse</label>
       <input type="text" class="form-control" id="InputAdresse" name="adress">
+      <div id="messageErreurAdresse" class="erreurFormulaire"></div>
     </div>
     <div class="mb-3">
       <label for="InputVille" class="form-label">Ville</label>
       <input type="text" class="form-control" id="InputVille" name="ville">
+      <div id="messageErreurVille" class="erreurFormulaire"></div>
     </div>
     <div class="mb-3">
       <label for="InputEmail1" class="form-label">Email</label>
-      <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" name="email">
+      <input type="email" class="form-control " id="InputEmail1" aria-describedby="emailHelp" name="email">
+      <div id="messageErreurEmail" class="erreurFormulaire"></div>
     </div>
     
     
@@ -67,6 +72,7 @@
   </form>
 <button type="button" onclick="envoieApi()" class="btn btn-primary">Valider</button>
 <!--  -->
+
  <footer>
 </footer>
 
