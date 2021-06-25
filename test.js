@@ -226,6 +226,8 @@ this.tableauId = []
         <div id="validePanier" class="d-inline-flex justify-content-center prixTotal">${prixTotalPanier / 100} 
         </div>€
         </div>
+        <div> <img class="logo-carte" src="css/logo-carte-bleu.png" alt="">
+        </div>
 
        
 
