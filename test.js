@@ -361,11 +361,16 @@ let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, for
      
     let order = JSON.parse (localStorage.getItem("order"))
       listOfProducts=`
-      <div>
-      <div class='' >${order}
-      </div>
-      <div class='' >${prixTotalPanier/100}€
-      </div>
+     <div class='valideLogo' ><p>Commande Validé</p>
+      <i class="fas fa-check-circle text-success confirmationPlacement" aria-hidden="true"></i></div>
+      <p class='confirmationPlacement'>
+      Numéro de Commande: 
+      <br>${order}
+      </p>
+      <p class='confirmationPlacement'>
+      Prix de la commande: <br>
+      ${prixTotalPanier/100}€
+      </p>
       
       
 

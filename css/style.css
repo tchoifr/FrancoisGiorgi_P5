@@ -45,7 +45,7 @@
     font-size: x-large;
 }
 .card{
-    width: 25rem;
+    width: 21.5rem;
     margin: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 15px 1px;
@@ -88,4 +88,35 @@ align-items: center;
 }
 .logo-carte{
     width: 100%;
+}
+.blocConfirmation{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    box-shadow: 0px -1px 6px 5px;
+    margin: 15px;
+    height: 12em;
+    border-radius: 20px;
+    width: 15em;
+    font-size: 1.5em;
+}
+.valideLogo{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}
+.confirmationPlacement{
+    margin-left: 30px;
+}
+.imgFond{
+background: url("../img/Matériel-de-visite-virtuelle.jpg");
+z-index: -5;
+-o-object-fit: cover;
+object-fit: cover;
+width: 100vw;
+height: 100vh;
+position: fixed;
+top: 0;
+left: 0;
 }
