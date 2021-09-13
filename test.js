@@ -17,7 +17,7 @@ let tableauId = [];
 
 
 // appel API (promesse)
-fetch('http://localhost:3000/api/cameras')
+fetch('https://orinocouille.herokuapp.com/api/cameras')
 
 // pour activer la promesse utilisez (then)
   .then(function(res) {   
@@ -324,7 +324,7 @@ let contact = new Contact(formulaireNom, formulairePrenom, formulaireAdress, for
    document.getElementById('messageErreurEmail').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Remplir Email'
  }
  if(erreurChamps ===false){
-    fetch('http://localhost:3000/api/cameras/order', {
+    fetch('https://orinocouille.herokuapp.com/api/cameras/order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
